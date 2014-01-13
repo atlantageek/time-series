@@ -1,9 +1,17 @@
-class TimeSeries < Hash
+class TimeSeries
+  def initialize
+    @data_points = {}
+  end
+
   def <<(data_point)
-    self[data_point.timestamp] = data_point.data
+    @data_points[data_point.timestamp] = data_point.data
   end
 
   def at(timestamp)
-    self[timestamp]
+    @data_points[timestamp]
+  end
+
+  def length
+    @data_points.length
   end
 end
