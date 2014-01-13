@@ -15,7 +15,7 @@ describe TimeSeries do
     it "update the existing data point" do
       time_series << DataPoint.new(timestamp, 'some new data')
       time_series.length.should eql 1
-      time_series[timestamp].should eql 'some new data'
+      time_series.at(timestamp).should eql 'some new data'
     end
   end
 
