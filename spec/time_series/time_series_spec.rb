@@ -23,5 +23,12 @@ describe TimeSeries do
     it "returns data associated with the given timestamp" do
       time_series.at(timestamp).should eql data
     end
+
+    it "returns data in array if two or more timestamps are given" do
+      timestamp_2 = Time.now
+      data_2 = 'some new data'
+      time_series << DataPoint.new(timestamp_2, data_2)
+      time_series.at(timestamp, timestamp_2).should eql [data, data_2]
+    end
   end
 end

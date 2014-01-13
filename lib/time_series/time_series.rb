@@ -7,8 +7,11 @@ class TimeSeries
     @data_points[data_point.timestamp] = data_point.data
   end
 
-  def at(timestamp)
-    @data_points[timestamp]
+  def at(*timestamp)
+    results = @data_points.values_at(*timestamp)
+    results = results[0] if results.length == 1
+
+    return results
   end
 
   def length
