@@ -1,24 +1,18 @@
 require 'spec_helper'
 
 describe TimeSeries do
-  let(:time_series) { TimeSeries.new }
-  let(:timestamp)   { Time.now }
-  let(:data)        { { a: 1, b:2, c:3 } }
-
-  before { time_series << DataPoint.new(timestamp, data) }
+  let(:data_points) do
+    {
+      Time.at(1000000000) => "The first Unix billennium",
+      Time.at(1234567890) => "Let's go party",
+      Time.at(2000000000) => "The second Unix billennium", 
+      Time.at(2147485547) => "Year 2038 problem"
+    }
+  end
+  let(:time_series) { TimeSeries.new(data_points) }
 
   describe "#new" do
-    let(:data_points) do
-      {
-        Time.at(1000000000) => "The first Unix billennium",
-        Time.at(1234567890) => "Let's go party",
-        Time.at(2000000000) => "The second Unix billennium", 
-        Time.at(2147485547) => "Year 2038 problem"
-      }
-    end
-
     it "takes a Hash" do
-      time_series = TimeSeries.new(data_points)
       time_series.length.should eql 4
     end
 
@@ -30,26 +24,25 @@ describe TimeSeries do
 
   describe "#<<" do
     it "adds a new data point" do
-      time_series.length.should eql 1
+      time_series << DataPoint.new(Time.now, "Knock knock")
+      time_series.length.should eql 5
     end
 
     it "update the existing data point" do
-      time_series << DataPoint.new(timestamp, 'some new data')
-      time_series.length.should eql 1
-      time_series.at(timestamp).should eql 'some new data'
+      time_series << DataPoint.new(Time.at(1234567890), 'PARTY TIME!')
+      time_series.length.should eql 4
+      time_series.at(Time.at(1234567890)).should eql 'PARTY TIME!'
     end
   end
 
   describe "#at" do
     it "returns data associated with the given timestamp" do
-      time_series.at(timestamp).should eql data
+      time_series.at(Time.at(1000000000)).should eql "The first Unix billennium"
     end
 
     it "returns data in array if two or more timestamps are given" do
-      timestamp_2 = Time.now
-      data_2 = 'some new data'
-      time_series << DataPoint.new(timestamp_2, data_2)
-      time_series.at(timestamp, timestamp_2).should eql [data, data_2]
+      time_series.at(Time.at(1000000000), Time.at(2000000000)).should eql(
+        ["The first Unix billennium", "The second Unix billennium"])
     end
   end
 end
