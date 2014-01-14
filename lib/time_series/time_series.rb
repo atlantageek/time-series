@@ -1,6 +1,12 @@
 class TimeSeries
-  def initialize
-    @data_points = {}
+  def initialize(*args)
+    case args.length
+    when 1 then data_points = args[0]
+    when 2 then data_points = Hash[args[0].zip(args[1])]
+    else data_points = {}
+    end
+
+    @data_points = data_points
   end
 
   def <<(data_point)

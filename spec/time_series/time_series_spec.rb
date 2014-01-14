@@ -7,6 +7,27 @@ describe TimeSeries do
 
   before { time_series << DataPoint.new(timestamp, data) }
 
+  describe "#new" do
+    let(:data_points) do
+      {
+        Time.at(1000000000) => "The first Unix billennium",
+        Time.at(1234567890) => "Let's go party",
+        Time.at(2000000000) => "The second Unix billennium", 
+        Time.at(2147485547) => "Year 2038 problem"
+      }
+    end
+
+    it "takes a Hash" do
+      time_series = TimeSeries.new(data_points)
+      time_series.length.should eql 4
+    end
+
+    it "takes a array of timestamps and a array of data" do
+      time_series = TimeSeries.new(data_points.keys, data_points.values)
+      time_series.length.should eql 4
+    end
+  end
+
   describe "#<<" do
     it "adds a new data point" do
       time_series.length.should eql 1
