@@ -3,9 +3,9 @@ require 'spec_helper'
 describe TimeSeries do
   let(:data_points) do
     {
-      Time.at(1000000000) => "The first Unix billennium",
+      Time.at(2000000000) => "The second Unix billennium",
       Time.at(1234567890) => "Let's go party",
-      Time.at(2000000000) => "The second Unix billennium", 
+      Time.at(1000000000) => "The first Unix billennium",
       Time.at(2147485547) => "Year 2038 problem"
     }
   end
