@@ -65,4 +65,10 @@ describe TimeSeries do
       ts.at(Time.at(2000000000), Time.at(2147485547)).should eql [nil, nil]
     end
   end
+
+  describe "is enumerable" do
+    it "returns the first data point(s) according to its timestamp" do
+      time_series.first(2).should eql ["The first Unix billennium", "Let's go party"]
+    end
+  end
 end

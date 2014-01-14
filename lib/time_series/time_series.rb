@@ -1,4 +1,6 @@
 class TimeSeries
+  include Enumerable
+
   def initialize(*args)
     case args.length
     when 1 then data_points = args[0]
@@ -32,6 +34,10 @@ class TimeSeries
     end
 
     return TimeSeries.new data_points
+  end
+
+  def each(&block)
+    Hash[@data_points.sort].values.each(&block)
   end
 
   def length
