@@ -20,6 +20,20 @@ class TimeSeries
     return results
   end
 
+  def slice(timeframe)
+    from, to = timeframe[:from], timeframe[:to]
+
+    data_points = @data_points.select do |t, data|
+      case [!from.nil?, !to.nil?]
+      when [true, true] then t >= from and t <= to
+      when [true, false] then t >= from
+      when [false, true] then t <= to
+      end
+    end
+
+    return TimeSeries.new data_points
+  end
+
   def length
     @data_points.length
   end

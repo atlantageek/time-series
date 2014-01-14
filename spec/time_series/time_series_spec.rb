@@ -45,4 +45,24 @@ describe TimeSeries do
         ["The first Unix billennium", "The second Unix billennium"])
     end
   end
+
+  describe "#slice" do
+    it "returns all data points in the given timeframe" do
+      ts = time_series.slice from: Time.at(1000000000), to: Time.at(2000000000)
+      ts.length.should eql 3
+      ts.at(Time.at 2147485547).should eql nil
+    end
+
+    it "returns all data points after the from time" do
+      ts = time_series.slice from: Time.at(2000000000)
+      ts.length.should eql 2
+      ts.at(Time.at(1000000000), Time.at(1234567890)).should eql [nil, nil]
+    end
+
+    it "returns all data points before the to time" do
+      ts = time_series.slice to: Time.at(1234567890)
+      ts.length.should eql 2
+      ts.at(Time.at(2000000000), Time.at(2147485547)).should eql [nil, nil]
+    end
+  end
 end
