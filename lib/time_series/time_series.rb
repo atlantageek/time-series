@@ -40,6 +40,10 @@ class TimeSeries
     Hash[@data_points.sort].values.each(&block)
   end
 
+  def last(n = 1)
+    Hash[@data_points.sort.last(n)].values
+  end
+
   def length
     @data_points.length
   end

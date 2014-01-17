@@ -70,5 +70,9 @@ describe TimeSeries do
     it "returns the first data point(s) according to its timestamp" do
       time_series.first(2).should eql ["The first Unix billennium", "Let's go party"]
     end
+
+    it "returns the last data point(s) according to its timestamp" do
+      time_series.last(2).should eql ["The second Unix billennium", "Year 2038 problem"]
+    end
   end
 end
