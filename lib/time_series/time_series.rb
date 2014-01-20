@@ -1,6 +1,8 @@
 class TimeSeries
   include Enumerable
 
+  attr_reader :data_points
+
   def initialize(*args)
     case args.length
     when 1 then data_points = args[0]
