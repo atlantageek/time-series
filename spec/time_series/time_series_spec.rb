@@ -2,21 +2,23 @@ require 'spec_helper'
 
 describe TimeSeries do
   let(:data_points) do
-    {
+    data_points = {
       Time.at(2000000000) => "The second Unix billennium",
       Time.at(1234567890) => "Let's go party",
       Time.at(1000000000) => "The first Unix billennium",
       Time.at(2147485547) => "Year 2038 problem"
     }
+    data_points.keys.zip(data_points.values).collect { |dp| DataPoint.new(dp[0], dp[1]) }
   end
   let(:time_series) { TimeSeries.new(data_points) }
 
   describe "#new" do
-    it "takes a Hash" do
+    it "takes a array of DataPoints" do
       time_series.length.should eql 4
     end
 
     it "takes a array of timestamps and a array of data" do
+      data_points = time_series.data_points
       time_series = TimeSeries.new(data_points.keys, data_points.values)
       time_series.length.should eql 4
     end
@@ -31,18 +33,19 @@ describe TimeSeries do
     it "update the existing data point" do
       time_series << DataPoint.new(Time.at(1234567890), 'PARTY TIME!')
       time_series.length.should eql 4
-      time_series.at(Time.at(1234567890)).should eql 'PARTY TIME!'
+      time_series.at(Time.at(1234567890)).data.should eql 'PARTY TIME!'
     end
   end
 
   describe "#at" do
     it "returns data associated with the given timestamp" do
-      time_series.at(Time.at(1000000000)).should eql "The first Unix billennium"
+      time_series.at(Time.at(1000000000)).data.should eql "The first Unix billennium"
     end
 
     it "returns data in array if two or more timestamps are given" do
-      time_series.at(Time.at(1000000000), Time.at(2000000000)).should eql(
-        ["The first Unix billennium", "The second Unix billennium"])
+      time_series.at(Time.at(1000000000), Time.at(2000000000))
+        .collect { |data_point| data_point.data }.should
+        eql(["The first Unix billennium", "The second Unix billennium"])
     end
   end
 
@@ -68,11 +71,13 @@ describe TimeSeries do
 
   describe "is enumerable" do
     it "returns the first data point(s) according to its timestamp" do
-      time_series.first(2).should eql ["The first Unix billennium", "Let's go party"]
+      time_series.first(2).collect { |data_point| data_point.data }.should
+        eql ["The first Unix billennium", "Let's go party"]
     end
 
     it "returns the last data point(s) according to its timestamp" do
-      time_series.last(2).should eql ["The second Unix billennium", "Year 2038 problem"]
+      time_series.last(2).collect { |data_point| data_point.data }.should
+        eql ["The second Unix billennium", "Year 2038 problem"]
     end
   end
 end

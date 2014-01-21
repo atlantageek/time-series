@@ -6,15 +6,18 @@ class TimeSeries
   def initialize(*args)
     case args.length
     when 1 then data_points = args[0]
-    when 2 then data_points = Hash[args[0].zip(args[1])]
-    else data_points = {}
+    when 2 then data_points = args[0].zip(args[1]).collect { |dp| DataPoint.new(dp[0], dp[1]) }
+    else data_points = []
     end
 
-    @data_points = data_points
+    @data_points = {}
+    self << data_points
   end
 
-  def <<(data_point)
-    @data_points[data_point.timestamp] = data_point.data
+  def <<(*data_points)
+    data_points.flatten.each do |data_point|
+      @data_points[data_point.timestamp] = data_point
+    end
   end
 
   def at(*timestamps)
@@ -35,7 +38,7 @@ class TimeSeries
       end
     end
 
-    return TimeSeries.new data_points
+    return TimeSeries.new data_points.keys, data_points.values
   end
 
   def each(&block)
