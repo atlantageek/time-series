@@ -10,4 +10,19 @@ describe DataPoint do
       data_point.data.should eql data
     end
   end
+
+  describe "is comparable" do
+    it "Two DataPoints are equal given the same timestamp and data" do
+      one = DataPoint.new(Time.at(1000000000), "The first UNIX billennium".gsub('UNIX', 'Unix'))
+      another = DataPoint.new(Time.new(2001, 9, 9, 9, 46, 40, '+08:00'), "The first Unix billennium")
+      one.should eq another
+    end
+
+    it "DataPoints are compared by its timestamp" do
+      first = DataPoint.new(Time.at(1000000000), "The first Unix billennium")
+      second = DataPoint.new(Time.at(2000000000), "The second Unix billennium")
+      first.should < second
+      second.should > first
+    end
+  end
 end
