@@ -80,4 +80,11 @@ describe TimeSeries do
         eql ["The second Unix billennium", "Year 2038 problem"]
     end
   end
+
+  describe "#to_a" do
+    it "returns a array of sorted DataPoints" do
+      time_series.to_a.should be_a_kind_of Array
+      time_series.to_a.should eql data_points.sort
+    end
+  end
 end

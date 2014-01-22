@@ -52,4 +52,8 @@ class TimeSeries
   def length
     @data_points.length
   end
+
+  def to_a
+    Hash[@data_points.sort].values
+  end
 end
