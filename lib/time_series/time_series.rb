@@ -38,7 +38,7 @@ class TimeSeries
       end
     end
 
-    return TimeSeries.new data_points.keys, data_points.values
+    return self.class.new data_points.keys, data_points.values
   end
 
   def each(&block)
