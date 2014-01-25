@@ -4,6 +4,7 @@ class DataPoint
   attr_reader :timestamp, :data
 
   def initialize(timestamp, data)
+    timestamp = timestamp.to_time unless timestamp.kind_of? Time
     @timestamp, @data = timestamp, data
   end
 
