@@ -18,6 +18,16 @@ describe DataPoint do
     end
   end
 
+  describe "#date" do
+    let(:date)       { Date.new(2014, 2, 8) }
+    let(:data_point) { DataPoint.new(date, data) }
+
+    it "returns a Date object" do
+      data_point.date.should be_a_kind_of Date
+      data_point.date.should eql date
+    end
+  end
+
   describe "is comparable" do
     it "Two DataPoints are equal given the same timestamp and data" do
       one = DataPoint.new(Time.at(1000000000), "The first UNIX billennium".gsub('UNIX', 'Unix'))

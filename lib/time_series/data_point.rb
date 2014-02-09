@@ -8,6 +8,10 @@ class DataPoint
     @timestamp, @data = timestamp, data
   end
 
+  def date
+    timestamp.to_date
+  end
+
   def <=>(another)
     result = @timestamp <=> another.timestamp
   end
