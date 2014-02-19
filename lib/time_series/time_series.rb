@@ -46,7 +46,10 @@ class TimeSeries
   end
 
   def last(n = 1)
-    Hash[@data_points.sort.last(n)].values
+    results = Hash[@data_points.sort.last(n)].values
+    results = results[0] if results.length == 1
+
+    return results
   end
 
   def length

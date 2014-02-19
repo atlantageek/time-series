@@ -71,11 +71,13 @@ describe TimeSeries do
 
   describe "is enumerable" do
     it "returns the first data point(s) according to its timestamp" do
+      time_series.first.data.should eql "The first Unix billennium"
       time_series.first(2).collect { |data_point| data_point.data }.should
         eql ["The first Unix billennium", "Let's go party"]
     end
 
     it "returns the last data point(s) according to its timestamp" do
+      time_series.last.data.should eql "Year 2038 problem"
       time_series.last(2).collect { |data_point| data_point.data }.should
         eql ["The second Unix billennium", "Year 2038 problem"]
     end
