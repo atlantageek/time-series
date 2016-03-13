@@ -105,30 +105,39 @@ class TimeSeries
 
   def round_to_month(secs)
     t1 = Time.at secs
-    t2 = (t1.to_datetime >> 1).to_time
     s1 = Time.new(t1.year, month=t1.month)
-    s2 = Time.new(t2.year, month=t2.month)
-    (t1-s1) < (s2-t1) ? s1 : s2
+    s1
+  end
+
+  def round_to_year(secs)
+    t1 = Time.at secs
+    s1 = Time.new(t1.year)
+    s1
   end
 
   def round_to_nearest(tm, time_period)
-    #grouping
-    multiplier = period_lookup(time_period)
     result = 0
-    if (multiplier > 0)
-      result = Time.at((tm.to_i / multiplier).floor * multiplier)
+    if (time_period == :year)
+      result = round_to_year(tm.to_i)
+    elsif (time_period == :month)
+      result = round_to_month(tm.to_i)
+    else
+      #grouping
+      multiplier = period_lookup(time_period)
+      if (multiplier > 0)
+        result = Time.at((tm.to_i / multiplier).floor * multiplier)
+      end
     end
     result
   end
 
   def resample(time_period, fnc_id)
     hsh = Hash[@data_points.sort]
-    seconds = period_lookup(time_period)
     #Hash[@data_points.sort].values.each(&block)
     groups = hsh.keys.group_by{|tm| 
       round_to_nearest(tm, time_period)
     }
-
+puts groups.inspect()
     result={}
     case fnc_id
     when :max
@@ -141,6 +150,7 @@ class TimeSeries
     groups.each_pair {|key,value|
       result[key] = fn.call(groups[key])
     }
+    puts result.keys.inspect()
     return self.class.new(result.keys, result.values)
   end
 end

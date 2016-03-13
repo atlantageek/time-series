@@ -97,11 +97,46 @@ describe TimeSeries do
     }
     data_points.keys.zip(data_points.values).collect { |dp| DataPoint.new(dp[0], dp[1]) }
   end
+
   let(:second_time_series) { TimeSeries.new(second_data_points) }
-  describe "resample" do
+  describe "resample seconds to minutes" do
     it "takes a timeseries and resamples it up to the minute time range length should equal 2" do
         minute_time_series = second_time_series.resample(:minute, :avg)
         expect(minute_time_series.length).to eql 2
+        timestamps = Hash[minute_time_series.data_points.sort].keys
+        values = Hash[minute_time_series.data_points.sort].values
+	expect(timestamps[0].to_i).to eql 1457676480
+	expect(timestamps[1].to_i).to eql 1457676660
+
+	expect(values[0].data.to_i).to eql 33
+	expect(values[1].data.to_i).to eql 24
+    end
+  end
+
+  let(:third_data_points) do
+    data_points = {
+      Time.at(1457676710) => 1, #at 2016/3/11 06:11:50
+      Time.at(1455323294) => 27, #at 2016/2/13/00:28:14
+      Time.at(1455668894) => 44, #at 2016/2/17/00:28:14
+      Time.at(1452990494) => 44, #at 2016/1/17/00:28:14
+      Time.at(1452904094) => 22, #at 2016/1/15/06:08:05
+    }
+    data_points.keys.zip(data_points.values).collect { |dp| DataPoint.new(dp[0], dp[1]) }
+  end
+  let(:third_time_series) { TimeSeries.new(third_data_points) }
+  describe "resample seconds to months" do
+    it "takes a timeseries and resamples it up to the month time range length should equal 3" do
+        month_time_series = third_time_series.resample(:month, :avg)
+        expect(month_time_series.length).to eql 3
+        timestamps = Hash[month_time_series.data_points.sort].keys
+        values = Hash[month_time_series.data_points.sort].values
+	expect(timestamps[0].to_i).to eql 1451624400
+	expect(timestamps[1].to_i).to eql 1454302800
+	expect(timestamps[2].to_i).to eql 1456808400
+
+	expect(values[0].data.to_i).to eql 33
+	expect(values[1].data.to_i).to eql 35
+	expect(values[2].data.to_i).to eql 1
     end
   end
 end
